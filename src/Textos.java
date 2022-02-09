@@ -1,3 +1,5 @@
+package src;
+
 import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,6 +19,9 @@ public class Textos {
      String[] s= Files.readString(path).split("@");
      texts=s;
      return s;
+//date
+
+
     }
     //private Map<String,Integer> countIndex(){
         //Pattern pattern= Pattern.compile("[A-Z]");
