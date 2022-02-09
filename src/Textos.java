@@ -19,7 +19,7 @@ public class Textos {
      String[] s= Files.readString(path).split("@");
      texts=s;
      return s;
-//date
+return s;
 
 
     }
