@@ -31,11 +31,11 @@ public class Test {
         for(int i=0;i<obras.length;i++)
         {
           executorService.execute(new Texto(obras[i]));
-          System.out.println("Existen paralelamente "+Thread.activeCount()+" threads (incluyendo el main)");
         }
+        System.out.println("Existen paralelamente "+Thread.activeCount()+" threads (incluyendo el main)");
         executorService.shutdown();
         try {
-            executorService.awaitTermination(10_000L, TimeUnit.MILLISECONDS );
+            executorService.awaitTermination(10000L, TimeUnit.MILLISECONDS );
         } catch (InterruptedException ex) {
             Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -52,6 +52,7 @@ public class Test {
         Long tfinal=System.currentTimeMillis();
         textfinal.setInputTextos(obras);
         System.out.println("Tiempo secuencial "+ (System.currentTimeMillis()-tfinal)+ " ms");
+        System.out.println(textfinal.getMap().toString());
         }
 
 
