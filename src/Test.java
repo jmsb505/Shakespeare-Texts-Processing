@@ -14,7 +14,7 @@ public class Test {
     public static void main(String[] args) throws IOException {
         Path p= Paths.get("src/Shakespeare.txt");
         String[] s= Files.readString(p).split("@");
-        Texto t= new Texto(s);
+        Texto t= new Texto(s[0]);
         System.out.println(t.getMap());
 
 
