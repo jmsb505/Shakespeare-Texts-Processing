@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class Test {
     public static void main(String[] args) throws IOException {
-        String wholetxt= Files.lines(Paths.get("src/Shakespeare.txt")).collect(Collectors.joining());
+        String wholetxt= Files.lines(Paths.get("Shakespeare.txt")).collect(Collectors.joining());
         String[] obras = wholetxt.split("@");
         List<Texto> conjunto=new ArrayList<Texto>();
         ExecutorService executorService = Executors.newFixedThreadPool(38);
