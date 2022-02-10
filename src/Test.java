@@ -23,14 +23,17 @@ public class Test {
         //String[] s= Files.readString(p).split("@");
         String wholetxt= Files.lines(Paths.get("Shakespeare.txt")).collect(Collectors.joining());
         String[] obras = wholetxt.split("@");
-        Texto t= new Texto(obras[0]);
-        Texto t2= new Texto(obras[1]);
-        int count=0;
+        List<Texto> conjunto=new ArrayList<Texto>();
         ExecutorService executorService = Executors.newFixedThreadPool(38);
         Long tpara=System.currentTimeMillis();
         for(int i=0;i<obras.length;i++)
         {
-          executorService.execute(new Texto(obras[i]));
+          Texto txtx =new Texto(obras[i]);
+          conjunto.add(txtx);
+        }
+        for(int i=0;i<conjunto.size();i++)
+        {
+          executorService.execute(conjunto.get(i));
         }
         System.out.println("Existen paralelamente "+Thread.activeCount()+" threads (incluyendo el main)");//added
         executorService.shutdown();
