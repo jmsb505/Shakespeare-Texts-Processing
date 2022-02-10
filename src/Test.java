@@ -1,21 +1,21 @@
 
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Test {
     public static void main(String[] args) throws IOException {
-        String wholetxt= Files.lines(Paths.get("Shakespeare.txt")).collect(Collectors.joining());
+        String wholetxt= Files.lines(Paths.get("src/Shakespeare.txt")).collect(Collectors.joining());
         String[] obras = wholetxt.split("@");
         List<Texto> conjunto=new ArrayList<Texto>();
         ExecutorService executorService = Executors.newFixedThreadPool(38);
@@ -37,11 +37,7 @@ public class Test {
             Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-       
-
-       
-        
-        //Secuencial
+        //Sumar los maps de los threads y secuencial
         if(executorService.isTerminated())
         {
         ArrayList<Map<String,Long>> Maps=new ArrayList<>();
@@ -57,14 +53,29 @@ public class Test {
         Texto textfinal=new Texto(obras);
         Long tfinal=System.currentTimeMillis();
         textfinal.setInputTextos(obras);
-        System.out.println("Tiempo secuencial "+ (System.currentTimeMillis()-tfinal)+ " ms");
-        System.out.println("Mapa de secuencial: "+textfinal.getMap().toString());
-        System.out.println("Mapa suma de threads: "+suma);
-        System.out.println("Tiempo de Thread "+conjunto.get(0).getTime());
-        
-        }
-        
-
+        String Header=" ,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z\n";
+        StringBuilder content= new StringBuilder();
+        content.append(Header);
+            AtomicInteger count= new AtomicInteger(1);
+        Maps.forEach(e->{
+            content.append("Texto "+count+",");
+            e.forEach((key,value)->{
+                content.append(value+",");
+            });
+            content.append("\n");
+            count.getAndIncrement();
+        });
+        content.append("Suma,");
+        suma.forEach((key,value)->content.append(value+","));
+        content.append("\nSecuencial,");
+        textfinal.getMap()
+                .forEach((key,value)->content.append(value+","));
+            try(FileWriter fw=new FileWriter("Frecuencias.csv")) {
+                fw.write(content.toString());
+            } catch (FileNotFoundException exception){
+                System.out.println(exception.getMessage());
+            }
+}
 
 
 
