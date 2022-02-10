@@ -29,7 +29,7 @@ public class Test {
         {
           executorService.execute(conjunto.get(i));
         }
-        System.out.println("Existen paralelamente "+Thread.activeCount()+" threads (incluyendo el main)");//added
+        System.out.println("Existen paralelamente "+Thread.activeCount()+" threads (incluyendo el main):");//added
         executorService.shutdown();
         try {
             executorService.awaitTermination(10000L, TimeUnit.MILLISECONDS );
@@ -49,10 +49,16 @@ public class Test {
             e.forEach((key, value) -> suma.put(key, suma.get(key)+value));
         });
 
-
+        ExecutorService executorService2 = Executors.newFixedThreadPool(1);
+        Texto textfinal=new Texto(wholetxt);
+        executorService2.execute(textfinal);
         System.out.println("Existen secuencialmente "+Thread.activeCount()+" threads (incluyendo el main)\n\n");
-        Texto textfinal=new Texto(obras);
-        textfinal.setInputTextos(obras);
+        executorService2.shutdown();
+        try {
+            executorService2.awaitTermination(10000L, TimeUnit.MILLISECONDS );
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
+        }
         String Header=" ,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,ms\n";
         StringBuilder content= new StringBuilder();
         content.append(Header);
