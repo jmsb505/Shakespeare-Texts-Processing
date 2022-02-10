@@ -42,34 +42,35 @@ public class Test {
         {
         ArrayList<Map<String,Long>> Maps=new ArrayList<>();
         conjunto.forEach(e->Maps.add(e.getMap()));
-        Map<String,Long> suma= new TreeMap<>();
+        Map<String,Long> suma= new TreeMap<>();//podemos ser mas eficientes y no usar map
         suma.putAll(Maps.get(0));
         suma.entrySet().forEach(e-> e.setValue(0L));
         Maps.forEach(e->{
             e.forEach((key, value) -> suma.put(key, suma.get(key)+value));
         });
 
+
         System.out.println("Existen secuencialmente "+Thread.activeCount()+" threads (incluyendo el main)\n\n");
         Texto textfinal=new Texto(obras);
-        Long tfinal=System.currentTimeMillis();
         textfinal.setInputTextos(obras);
-        String Header=" ,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z\n";
+        String Header=" ,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,ms\n";
         StringBuilder content= new StringBuilder();
         content.append(Header);
-            AtomicInteger count= new AtomicInteger(1);
-        Maps.forEach(e->{
-            content.append("Texto "+count+",");
-            e.forEach((key,value)->{
-                content.append(value+",");
+        AtomicInteger count= new AtomicInteger(1);
+
+            conjunto.forEach(e->{
+                content.append("Texto "+count+":,");
+                e.getMap().forEach((key,value)->content.append(value+","));
+                content.append(e.getTime()+"\n");
+                count.getAndIncrement();
             });
-            content.append("\n");
-            count.getAndIncrement();
-        });
-        content.append("Suma,");
+
+        content.append("Suma:,");
         suma.forEach((key,value)->content.append(value+","));
-        content.append("\nSecuencial,");
+        content.append(conjunto.get(37).getTime()+"\nSecuencial:,");
         textfinal.getMap()
                 .forEach((key,value)->content.append(value+","));
+        content.append(textfinal.getTime()+",");
             try(FileWriter fw=new FileWriter("Frecuencias.csv")) {
                 fw.write(content.toString());
             } catch (FileNotFoundException exception){

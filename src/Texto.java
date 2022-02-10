@@ -33,11 +33,13 @@ public class Texto implements Runnable{
     public void setInputTextos(String[] str) throws IOException {
         Pattern pattern= Pattern.compile("");
         Pattern pattern1 = Pattern.compile("[A-Z]");
+        Long t1=System.currentTimeMillis();
         map= Arrays.stream(str)
                 .flatMap(pattern::splitAsStream)
                 .map(String::toUpperCase)
                 .filter(pattern1.asPredicate())
                 .collect(Collectors.groupingBy(String::toUpperCase, TreeMap::new, Collectors.counting()));
+        tiempo=System.currentTimeMillis()-t1;
     }
     public void setInputTexto(String str) throws IOException {
         Pattern pattern1 = Pattern.compile("[A-Z]");
