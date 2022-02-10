@@ -1,3 +1,5 @@
+package src;
+
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,9 +14,11 @@ import java.util.stream.Collectors;
 
 public class Test {
     public static void main(String[] args) throws IOException {
-        Path p= Paths.get("src/Shakespeare.txt");
-        String[] s= Files.readString(p).split("@");
-        Texto t= new Texto(s[0]);
+        //Path p= Paths.get("src/Shakespeare.txt");
+        //String[] s= Files.readString(p).split("@");
+        String wholetxt= Files.lines(Paths.get("Shakespeare.txt")).collect(Collectors.joining());
+        String[] obras = wholetxt.split("@");
+        Texto t= new Texto(obras[0]);
         System.out.println(t.getMap());
 
 
