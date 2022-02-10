@@ -1,13 +1,9 @@
-package src;
-
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -19,8 +15,6 @@ import java.util.stream.Collectors;
 
 public class Test {
     public static void main(String[] args) throws IOException {
-        //Path p= Paths.get("src/Shakespeare.txt");
-        //String[] s= Files.readString(p).split("@");
         String wholetxt= Files.lines(Paths.get("Shakespeare.txt")).collect(Collectors.joining());
         String[] obras = wholetxt.split("@");
         List<Texto> conjunto=new ArrayList<Texto>();
@@ -50,14 +44,23 @@ public class Test {
         //Secuencial
         if(executorService.isTerminated())
         {
-        System.out.println("Existen secuencialmente "+Thread.activeCount()+" threads (incluyendo el main)");
+        ArrayList<Map<String,Long>> Maps=new ArrayList<>();
+        conjunto.forEach(e->Maps.add(e.getMap()));
+        Map<String,Long> suma= new TreeMap<>();
+        suma.putAll(Maps.get(0));
+        suma.entrySet().forEach(e-> e.setValue(0L));
+        Maps.forEach(e->{
+            e.forEach((key, value) -> suma.put(key, suma.get(key)+value));
+        });
+
+        System.out.println("Existen secuencialmente "+Thread.activeCount()+" threads (incluyendo el main)\n\n");
         Texto textfinal=new Texto(obras);
         Long tfinal=System.currentTimeMillis();
         textfinal.setInputTextos(obras);
         System.out.println("Tiempo secuencial "+ (System.currentTimeMillis()-tfinal)+ " ms");
-        System.out.println(textfinal.getMap().toString());
-        System.out.println("Mapa de thread"+conjunto.get(0).getMap().toString());
-        System.out.println("Tiempo de Thread"+conjunto.get(0).getTime());
+        System.out.println("Mapa de secuencial: "+textfinal.getMap().toString());
+        System.out.println("Mapa suma de threads: "+suma);
+        System.out.println("Tiempo de Thread "+conjunto.get(0).getTime());
         
         }
         
