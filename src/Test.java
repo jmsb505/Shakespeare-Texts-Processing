@@ -32,7 +32,7 @@ public class Test {
         {
           executorService.execute(new Texto(obras[i]));
         }
-        System.out.println("Existen paralelamente "+Thread.activeCount()+" threads (incluyendo el main)");
+        System.out.println("Existen paralelamente "+Thread.activeCount()+" threads (incluyendo el main)");//added
         executorService.shutdown();
         try {
             executorService.awaitTermination(10000L, TimeUnit.MILLISECONDS );
