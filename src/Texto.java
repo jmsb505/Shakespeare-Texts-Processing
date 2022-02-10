@@ -59,6 +59,10 @@ public class Texto implements Runnable{
     public Map<String, Long> getMap() {
         return map;
     }
+    public Long getTime()
+    {
+        return this.tiempo;
+    }
 
     @Override
     public void run() {

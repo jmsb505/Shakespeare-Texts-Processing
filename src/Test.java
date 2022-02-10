@@ -56,7 +56,11 @@ public class Test {
         textfinal.setInputTextos(obras);
         System.out.println("Tiempo secuencial "+ (System.currentTimeMillis()-tfinal)+ " ms");
         System.out.println(textfinal.getMap().toString());
+        System.out.println("Mapa de thread"+conjunto.get(0).getMap().toString());
+        System.out.println("Tiempo de Thread"+conjunto.get(0).getTime());
+        
         }
+        
 
 
 
