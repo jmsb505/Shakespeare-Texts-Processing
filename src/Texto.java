@@ -20,7 +20,7 @@ public class Texto implements Runnable{
 
     public Texto(String[] s) throws IOException {
         this.libros=s;
-        setInputTextos(s);
+        //setInputTextos(s);
     }
 
     public Texto(String s) throws IOException {
