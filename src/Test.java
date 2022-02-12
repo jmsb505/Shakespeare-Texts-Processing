@@ -19,7 +19,6 @@ public class Test {
         String[] obras = wholetxt.split("@");
         List<Texto> conjunto=new ArrayList<Texto>();
         ExecutorService executorService = Executors.newFixedThreadPool(38);
-        Long tpara=System.currentTimeMillis();
         for(int i=0;i<obras.length;i++)
         {
           Texto txtx =new Texto(obras[i]);
@@ -40,15 +39,12 @@ public class Test {
         //Sumar los maps de los threads y secuencial
         if(executorService.isTerminated())
         {
-        ArrayList<Map<String,Long>> Maps=new ArrayList<>();
-        conjunto.forEach(e->Maps.add(e.getMap()));
-        Map<String,Long> suma= new TreeMap<>();//podemos ser mas eficientes y no usar map
-        suma.putAll(Maps.get(0));
+        Map<String,Long> suma= new TreeMap<>();
+        suma.putAll(conjunto.get(0).getMap());
         suma.entrySet().forEach(e-> e.setValue(0L));
-        Maps.forEach(e->{
-            e.forEach((key, value) -> suma.put(key, suma.get(key)+value));
+        conjunto.forEach(e->{
+            e.getMap().forEach((key, value) -> suma.put(key, suma.get(key)+value));
         });
-
         ExecutorService executorService2 = Executors.newFixedThreadPool(1);
         Texto textfinal=new Texto(wholetxt);
         executorService2.execute(textfinal);
@@ -64,16 +60,15 @@ public class Test {
         content.append(Header);
         AtomicInteger count= new AtomicInteger(1);
 
-            conjunto.forEach(e->{
-                content.append("Texto "+count+":,");
-                e.getMap().forEach((key,value)->content.append(value+","));
-                content.append(e.getTime()+"\n");
-                count.getAndIncrement();
+        conjunto.forEach(e->{
+            content.append("Texto "+count+":,");
+            e.getMap().forEach((key,value)->content.append(value+","));
+            content.append(e.getTime()+"\n");
+            count.getAndIncrement();
             });
-
         content.append("Suma:,");
         suma.forEach((key,value)->content.append(value+","));
-        content.append(conjunto.get(37).getTime()+"\nSecuencial:,");
+        content.append(Texto.getMaxTime()+"\nSecuencial:,");
         textfinal.getMap()
                 .forEach((key,value)->content.append(value+","));
         content.append(textfinal.getTime()+",");
@@ -82,14 +77,7 @@ public class Test {
             } catch (FileNotFoundException exception){
                 System.out.println(exception.getMessage());
             }
-}
-
-
-
-
-
-
+        }
     }
-
 }
 

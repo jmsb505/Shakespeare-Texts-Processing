@@ -1,7 +1,5 @@
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -12,42 +10,16 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Texto implements Runnable{
-    private String[] libros;
-    //prueb
+
     private String individual;
     private Map<String,Long> map= new TreeMap<>();
     private Long tiempo;
-
-    public Texto(String[] s) throws IOException {
-        this.libros=s;
-        //setInputTextos(s);
-    }
+    private static ArrayList<Long> Timelog=new ArrayList<>();
 
     public Texto(String s) throws IOException {
         this.individual=s;
-        //setInputTexto(s);
     }
 
-    
-
-    public void setInputTextos(String[] str) throws IOException {
-        Pattern pattern= Pattern.compile("");
-        Pattern pattern1 = Pattern.compile("[A-Z]");
-        Long t1=System.currentTimeMillis();
-        map= Arrays.stream(str)
-                .flatMap(pattern::splitAsStream)
-                .map(String::toUpperCase)
-                .filter(pattern1.asPredicate())
-                .collect(Collectors.groupingBy(String::toUpperCase, TreeMap::new, Collectors.counting()));
-        tiempo=System.currentTimeMillis()-t1;
-    }
-    public void setInputTexto(String str) throws IOException {
-        Pattern pattern1 = Pattern.compile("[A-Z]");
-        map= Arrays.stream(str.split(""))
-                .map(String::toUpperCase)
-                .filter(pattern1.asPredicate())
-                .collect(Collectors.groupingBy(String::toUpperCase, TreeMap::new, Collectors.counting()));
-    }
         public void setInputTexto2(String str) throws IOException {
         Pattern pattern1 = Pattern.compile("[A-Z]");
         map= Arrays.stream(str.split(""))
@@ -65,6 +37,13 @@ public class Texto implements Runnable{
         return this.tiempo;
     }
 
+    public static Long getMaxTime(){
+        Timelog.set(Timelog.size()-1,0L);
+        return Timelog.stream().max(Long::compareTo).get();
+
+    }
+
+
     @Override
     public void run() {
         try {
@@ -72,6 +51,7 @@ public class Texto implements Runnable{
             setInputTexto2(individual);
             tiempo=System.currentTimeMillis()-t1;
             System.out.println("Thread"+Thread.currentThread().getName()+" se demoro "+ tiempo);
+            Timelog.add(tiempo);
             
         } catch (IOException ex) {
             Logger.getLogger(Texto.class.getName()).log(Level.SEVERE, null, ex);
